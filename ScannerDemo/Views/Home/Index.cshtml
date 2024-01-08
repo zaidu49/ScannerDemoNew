@@ -1,0 +1,114 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@*<div class="text-center">*@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<h1>Scan QR code</h1>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Click To Scan Barcode
+</button>
+
+@*<div id="scan-result"></div>*@
+@*<div style="display: flex; justify-content: center;">
+    <div id="code-reader" style="width:500px;"></div>
+</div>*@
+
+<div class="modal " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Scan Barcode</h5><br />
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="scan-result"></div>
+                <div style="display: flex; justify-content: center;">
+                    <div id="code-reader" style="width:500px;"></div>
+                </div>
+                @using (Html.BeginForm("ScanResult", "Home", FormMethod.Post, new { id="scannerForm", @class = "" })){
+                    <input type="text" id="scanResult" name="scanResult" />
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="modal " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @using (Html.BeginForm("ScanResult", "Home", FormMethod.Post, new { @class = "" })) {
+        <input type="text" id="scanResult" name="scanResult" />
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Scan Barcode</h5><br />
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div id="scan-result"></div>
+            <div style="display: flex; justify-content: center;">
+                <div id="code-reader" style="width:500px;"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    }
+</div>*@
+
+@*<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm">Small modal</button>
+
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            ...
+        </div>
+    </div>
+</div>*@
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    function DOMReady(fn) {
+        if (document.readyState === "complete" || document.readyState === "interactive") {
+            setTimeout(fn, 1);
+        } else {
+            document.addEventListener("DOMContentLoaded", fn)
+            var decodeText = "error initializing";
+            $('#scanResult').val(decodeText);
+            $('#scannerForm').submit();
+            //document.getElementById('theForm').submit();
+            //location.href = `/Home/ScanResult?scanResult=${decodeText}`;
+        }
+    }
+
+    DOMReady(function () {
+        var myQR = document.getElementById('scan-result');
+        lastResult = 0;
+        countResult = 0;
+
+        function onScanSuccess(decodeText, decodeResult) {
+            if (decodeText != lastResult) {
+                ++countResult;
+                lastResult = decodeResult;
+
+                alert("Scanned Data: " + decodeText, decodeResult)
+                myQR.innerHTML = "you scanned: " + decodeText;
+                if (decodeText != 'undefined' && decodeText != null && decodeText != '') {
+                    $('#scanResult').val("Error Initializing");
+                    $('#scannerForm').submit();
+                    //location.href = `/Home/ScanResult?scanResult=${decodeText}`;
+                }
+            }
+        }
+        var htmlScanner = new Html5QrcodeScanner("code-reader", { fps: 10, qrbox: 250 });
+
+        htmlScanner.render(onScanSuccess);
+    })
+</script>
