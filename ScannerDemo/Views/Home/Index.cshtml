@@ -29,16 +29,21 @@
             </div>
             <div class="modal-body">
                 <div id="scan-result"></div>
+                @using (Html.BeginForm("ScanResult", "Home", FormMethod.Post, new { id = "scannerForm", @class = "" })) {
+                    <div class="form-group">
+                        <label class="control-label">Scan Id</label>
+                        <input type="text" placeholder="enter any number (optional)">
+                    </div>
+                    <input type="hidden" id="scanResult" name="scanResult" />
+                }
                 <div style="display: flex; justify-content: center;">
                     <div id="code-reader" style="width:500px;"></div>
                 </div>
-                @using (Html.BeginForm("ScanResult", "Home", FormMethod.Post, new { id="scannerForm", @class = "" })){
-                    <input type="text" id="scanResult" name="scanResult" />
-                }
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                
+
             </div>
         </div>
     </div>
