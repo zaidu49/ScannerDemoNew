@@ -77,7 +77,7 @@
                 alert("Scanned Data: " + decodeText, decodeResult)
                 myQR.innerHTML = "you scanned: " + decodeText;
                 if (decodeText != 'undefined' && decodeText != null && decodeText != '') {
-                    $('#scanResult').val("Error Initializing");
+                    $('#scanResult').val(decodeText);
                     $('#scannerForm').submit();
                     //location.href = `/Home/ScanResult?scanResult=${decodeText}`;
                 }
